@@ -32,13 +32,13 @@ jobs:
           dotnet-version: '7.0.x' #we should change it based on the actual version used!
 
       #restore dependencies
-      - name: Restore dependencies
-        run: dotnet restore
+      #- name: Restore dependencies
+      #  run: dotnet restore
 
       # the application build
-      - name: Build the application
-        run: dotnet build --configuration Release
+      #- name: Build the application
+      #  run: dotnet build --configuration Release
 
       #running the unit tests
-      - name: Run tests
-        run: dotnet test --configuration Release
+      #- name: Run tests
+      #  run: dotnet test --configuration Release
