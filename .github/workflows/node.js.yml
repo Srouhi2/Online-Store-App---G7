@@ -21,9 +21,5 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    # Skipping dependency installation and build for now since lock files are missing
-    #- run: npm ci
-    #- run: npm run build --if-present
-    #- run: npm test
+   
+    # Skipping dependency installation and build for now till getting the codes
