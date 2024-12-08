@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "echo \"No tests yet\" && exit 0"  // Add this line for now if no tests are set up
+    "test": "echo \"No tests yet\" && exit 0"
   },
   "dependencies": {
     "autoprefixer": "^10.4.20",
