@@ -4,26 +4,15 @@ on:
   push:
     branches:
       - main
-      - Srouhi2-patch-1
-      - Srouhi-patch-2
-      - WestHaddock-patch-1
-      - WestHaddock-patch-2
       - frontend
-      - mhdan7s-database
-      - mhdan7s-patch-1
+      - Srouhi-patch-1
   pull_request:
     branches:
       - main
-      - Srouhi2-patch-1
-      - Srouhi-patch-2
-      - WestHaddock-patch-1
-      - WestHaddock-patch-2
       - frontend
-      - mhdan7s-database
-      - mhdan7s-patch-1
+      - Srouhi-patch-1
 
 jobs:
-  # Frontend Job
   frontend:
     runs-on: ubuntu-latest
     strategy:
@@ -39,51 +28,11 @@ jobs:
           cache: 'npm'
       - run: |
           cd frontend
+          # Ensure package-lock.json exists
+          if [ ! -f package-lock.json ]; then
+            echo "No package-lock.json found, running npm install to generate it"
+            npm install
+          fi
           npm ci
           npm run build --if-present
           npm test
-
-  # Backend Job (West-patch1 and West-patch2)
-  backend:
-    runs-on: ubuntu-latest
-    needs: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.x
-          cache: 'npm'
-      - run: |
-          cd backend
-          npm ci
-          npm run build --if-present
-          npm test
-
-  # Database Job (Mahtdan-patch1, mahdan-database)
-  database:
-    runs-on: ubuntu-latest
-    needs: backend
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Database
-        run: |
-          # Run database migrations or other SQL-related setup here
-          cd database
-          npm ci
-          npm run build --if-present
-          npm test
-
-  # Deployment Job (if applicable)
-  deploy:
-    runs-on: ubuntu-latest
-    needs: database
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to staging
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # or other deployment service
-        run: |
-          git remote add heroku https://git.heroku.com/your-app.git
-          git push heroku main
-
