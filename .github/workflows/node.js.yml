@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  frontend:
+  CI:
     runs-on: ubuntu-latest
     strategy:
       matrix:
