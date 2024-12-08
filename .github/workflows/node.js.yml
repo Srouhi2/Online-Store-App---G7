@@ -6,21 +6,21 @@ on:
       - main
       - Srouhi2-patch-1
       - Srouhi-patch-2
-      - west-patch1
-      - west-patch2
+      - WestHaddock-patch-1
+      - WestHaddock-patch-2
       - frontend
-      - mahdan-database
-      - mahdan-patch-1
+      - mhdan7s-database
+      - mhdan7s-patch-1
   pull_request:
     branches:
       - main
       - Srouhi2-patch-1
       - Srouhi-patch-2
-      - west-patch1
-      - west-patch2
+      - WestHaddock-patch-1
+      - WestHaddock-patch-2
       - frontend
-      - mahdan-database
-      - mahdan-patch-1
+      - mhdan7s-database
+      - mhdan7s-patch-1
 
 jobs:
   # Frontend Job
