@@ -12,6 +12,8 @@ interface Product {
   image: string;
   colors: string[];
   size: string[];
+  description: string[];
+
 }
 
 const HomePage = () => {
@@ -19,33 +21,105 @@ const HomePage = () => {
 
   const products: Product[] = [
     {
-      id: 1,  // id as number
+      id: 1, // id as number
       name: "Oversized T-shirt",
       price: 11.0,
       oldPrice: 34.0,
       image: "https://img.icons8.com/ios-filled/50/t-shirt--v1.png",
       colors: ["Black", "White", "Red"],
       size: ["S", "M", "L", "XL"],
+      description: []
     },
     {
-      id: 2,  // id as number
+      id: 2, // id as number
       name: "Casual Hoodie",
       price: 25.0,
       oldPrice: 50.0,
       image: "https://img.icons8.com/ios-filled/50/t-shirt--v1.png",
       colors: ["Gray", "Black", "Blue"],
       size: ["S", "M", "L", "XL"],
+      description: []
     },
     {
-      id: 3,  // id as number
+      id: 3,
       name: "Denim Jeans",
+      price: 18.0,
+      oldPrice: 19.0,
+      description: ["Stylish denim jeans with a modern fit."],
+      image: "https://img.icons8.com/3d-fluency/94/trousers.png",
+      colors: ["Blue", "Black"],
+      size: ["32", "34", "36", "38"],
+    },
+    {
+      id: 4,
+      name: "Rounded Red Hat",
       price: 40.0,
       oldPrice: 60.0,
+      description:[ "modern fit Red Hat"],
+      image: "https://img.icons8.com/3d-fluency/94/baseball-cap.png",
+      colors: ["Red"],
+      size: ["32", "34", "36", "38"],
+    },
+    {
+      id: 5,
+      name: "Linen-blend Shirt",
+      price: 75.0,
+      oldPrice: 90.0,
+      description: [],
       image: "https://img.icons8.com/ios-filled/50/t-shirt--v1.png",
       colors: ["Blue", "Black"],
       size: ["32", "34", "36", "38"],
     },
-    // Add more products as needed
+    {
+      id: 6,
+      name: "Long-sleeve Coat",
+      price: 50.0,
+      oldPrice: 60.0,
+      description: [],
+      image: "https://img.icons8.com/ios-filled/50/t-shirt--v1.png",
+      colors: ["Blue", "Black"],
+      size: ["32", "34", "36", "38"],
+    },
+    {
+      id: 7,
+      name: "Dotted Black Dress",
+      price: 40.0,
+      oldPrice: 60.0,
+      description: [],
+      image: "https://img.icons8.com/3d-fluency/94/wedding-dress.png",
+      colors: ["Blue", "Black"],
+      size: ["32", "34", "36", "38"],
+    },
+    {
+      id: 8,
+      name: "Polarised Sunglasses",
+      price: 30.0,
+      oldPrice: 55.0,
+      description: ["Stylish Sunglasses"],
+      image: "https://img.icons8.com/3d-fluency/94/smiling-face-with-sunglasses.png",
+      colors: ["Blue", "Black"],
+      size: []
+    },
+    {
+      id: 9,
+      name: "hat",
+      price: 49.99,
+      oldPrice: 60.0,
+      description: ["Modern Hat"],
+      image: "https://img.icons8.com/3d-fluency/94/black-hat.png",
+      colors: ["Blue", "Black","Green"],
+      size: ["32", "34", "36", "38"],
+    },
+    {
+      id: 10,
+      name: "Linen Plain Top",
+      price: 40.0,
+      oldPrice: 60.0,
+      description: [""],
+      image: "https://img.icons8.com/ios-filled/50/t-shirt--v1.png",
+      colors: ["Blue", "Black"],
+      size: ["32", "34", "36", "38"],
+    },
   ];
 
   return (
