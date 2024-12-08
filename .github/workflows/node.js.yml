@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - main
-      - frontend
-      - Srouhi-patch-1
   pull_request:
     branches:
       - main
-      - frontend
-      - Srouhi-patch-1
 
 jobs:
   frontend:
@@ -28,11 +24,6 @@ jobs:
           cache: 'npm'
       - run: |
           cd frontend
-          # Ensure package-lock.json exists
-          if [ ! -f package-lock.json ]; then
-            echo "No package-lock.json found, running npm install to generate it"
-            npm install
-          fi
           npm ci
           npm run build --if-present
           npm test
