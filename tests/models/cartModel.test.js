@@ -1,4 +1,4 @@
-const cartModel = require('../../models/cartModel');
+const cartModel = require('../../models/cartModel.js');
 const db = require('../../config/db');
 
 jest.mock('../../config/db', () => ({

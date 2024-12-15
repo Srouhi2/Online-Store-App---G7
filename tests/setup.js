@@ -1,6 +1,5 @@
 const mysql = require('mysql2');
 
-// Set NODE_ENV explicitly in case it’s not passed
 process.env.NODE_ENV = 'test';
 
 jest.mock('mysql2', () => {
@@ -20,6 +19,6 @@ jest.mock('mysql2', () => {
 });
 
 afterAll(() => {
-  jest.clearAllMocks(); // Clean up all mocks after tests
-  jest.restoreAllMocks(); // Restore original behavior of mocked methods
+  jest.clearAllMocks(); // Clear all mocks after tests
+  jest.restoreAllMocks(); // Restore original methods
 });

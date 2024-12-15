@@ -1,91 +1,118 @@
-const cartController = require('../../controllers/cartController');
-const cartModel = require('../../models/cartModel');
+const cartController = require('../../controllers/cartController.js');
+const cartModel = require('../../models/cartModel.js');
 
-jest.mock('../../models/cartModel'); // Mock the cart model
+jest.mock('../../models/cartModel.js', () => ({
+  addToCart: jest.fn(),
+  getCartByUserId: jest.fn(),
+  removeFromCart: jest.fn(),
+}));
 
 describe('Cart Controller', () => {
-  let mockRequest, mockResponse, mockNext;
-
-  beforeEach(() => {
-    mockRequest = { user: { id: 1 }, body: {}, params: {} };
-    mockResponse = { json: jest.fn(), status: jest.fn().mockReturnThis() };
-    mockNext = jest.fn();
+  afterEach(() => {
+    jest.clearAllMocks(); // Clear mocks after each test
   });
 
   describe('getCart', () => {
-    it('should return the user’s cart', async () => {
-      const mockCart = [{ product_id: 1, quantity: 2 }];
+    it('should return the user\'s cart', async () => {
+      const mockCart = [{ id: 1, product_id: 1, quantity: 2 }];
       cartModel.getCartByUserId.mockResolvedValue(mockCart);
 
-      await cartController.getCart(mockRequest, mockResponse, mockNext);
+      const req = { user: { id: 1 } };
+      const res = { json: jest.fn() };
+      const mockNext = jest.fn();
+
+      await cartController.getCart(req, res, mockNext);
 
       expect(cartModel.getCartByUserId).toHaveBeenCalledWith(1);
-      expect(mockResponse.json).toHaveBeenCalledWith({ success: true, data: mockCart });
+      expect(res.json).toHaveBeenCalledWith({ success: true, data: mockCart });
+      expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle database errors', async () => {
-      const mockError = new Error('Database Error');
-      cartModel.getCartByUserId.mockRejectedValue(mockError);
+    it('should handle errors gracefully', async () => {
+      const error = new Error('Database error');
+      cartModel.getCartByUserId.mockRejectedValue(error);
 
-      await cartController.getCart(mockRequest, mockResponse, mockNext);
+      const req = { user: { id: 1 } };
+      const res = { json: jest.fn() };
+      const mockNext = jest.fn();
 
-      expect(mockNext).toHaveBeenCalledWith(mockError);
+      await cartController.getCart(req, res, mockNext);
+
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 
   describe('addToCart', () => {
     it('should add a product to the cart', async () => {
-      const mockCartItem = { product_id: 1, quantity: 2 };
-      mockRequest.body = { productId: 1, quantity: 2 };
+      const mockCartItem = { id: 1, product_id: 1, quantity: 2 };
       cartModel.addToCart.mockResolvedValue(mockCartItem);
 
-      await cartController.addToCart(mockRequest, mockResponse, mockNext);
+      const req = { body: { productId: 1, quantity: 2 }, user: { id: 1 } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+      const mockNext = jest.fn();
+
+      await cartController.addToCart(req, res, mockNext);
 
       expect(cartModel.addToCart).toHaveBeenCalledWith(1, 1, 2);
-      expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith({ success: true, data: mockCartItem });
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith({ success: true, data: mockCartItem });
+      expect(mockNext).not.toHaveBeenCalled();
     });
 
     it('should handle missing fields in the request', async () => {
-      mockRequest.body = { quantity: 2 }; // Missing productId
+      const req = { body: { quantity: 2 }, user: { id: 1 } }; // Missing productId
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+      const mockNext = jest.fn();
 
-      await cartController.addToCart(mockRequest, mockResponse, mockNext);
+      await cartController.addToCart(req, res, mockNext);
 
-      // We expect this to not call the model method
-      expect(cartModel.addToCart).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalledWith(expect.any(Error)); // Check if an error is passed
+      expect(mockNext).toHaveBeenCalledWith(expect.any(Error));
+      expect(mockNext.mock.calls[0][0].message).toBe('Missing required fields: productId and quantity');
+      expect(mockNext.mock.calls[0][0].status).toBe(400);
     });
 
     it('should handle database errors', async () => {
-      const mockError = new Error('Database Error');
-      mockRequest.body = { productId: 1, quantity: 2 };
-      cartModel.addToCart.mockRejectedValue(mockError);
+      const error = new Error('Database error');
+      cartModel.addToCart.mockRejectedValue(error);
 
-      await cartController.addToCart(mockRequest, mockResponse, mockNext);
+      const req = { body: { productId: 1, quantity: 2 }, user: { id: 1 } };
+      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+      const mockNext = jest.fn();
 
-      expect(mockNext).toHaveBeenCalledWith(mockError);
+      await cartController.addToCart(req, res, mockNext);
+
+      expect(cartModel.addToCart).toHaveBeenCalledWith(1, 1, 2);
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 
   describe('removeFromCart', () => {
-    it('should remove an item from the cart', async () => {
-      mockRequest.params.id = 1;
+    it('should remove a product from the cart', async () => {
       cartModel.removeFromCart.mockResolvedValue();
 
-      await cartController.removeFromCart(mockRequest, mockResponse, mockNext);
+      const req = { params: { id: 1 }, user: { id: 1 } };
+      const res = { json: jest.fn() };
+      const mockNext = jest.fn();
+
+      await cartController.removeFromCart(req, res, mockNext);
 
       expect(cartModel.removeFromCart).toHaveBeenCalledWith(1, 1);
-      expect(mockResponse.json).toHaveBeenCalledWith({ success: true, message: 'Item removed from cart' });
+      expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Item removed from cart' });
+      expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle database errors', async () => {
-      const mockError = new Error('Database Error');
-      mockRequest.params.id = 1;
-      cartModel.removeFromCart.mockRejectedValue(mockError);
+    it('should handle database errors when removing a product', async () => {
+      const error = new Error('Database error');
+      cartModel.removeFromCart.mockRejectedValue(error);
 
-      await cartController.removeFromCart(mockRequest, mockResponse, mockNext);
+      const req = { params: { id: 1 }, user: { id: 1 } };
+      const res = { json: jest.fn() };
+      const mockNext = jest.fn();
 
-      expect(mockNext).toHaveBeenCalledWith(mockError);
+      await cartController.removeFromCart(req, res, mockNext);
+
+      expect(cartModel.removeFromCart).toHaveBeenCalledWith(1, 1);
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 });
