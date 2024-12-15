@@ -1,5 +1,5 @@
-const cartController = require('../../controllers/cartController');
-const cartModel = require('../../models/cartModel');
+const cartController = require('../../../controllers/cartController');
+const cartModel = require('../../../models/cartModel');
 
 jest.mock('../../models/cartModel'); // Mock the cart model
 
